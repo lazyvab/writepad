@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My WritePad</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      #writepad {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        resize: none;
+        border: 0;
+        outline: 0;
+        font-size: 16px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="writepad" placeholder="Write anything..."></textarea>
+    <script>
+      function debounce(func, timeout = 300){
+        let timer;
+        return (...args) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            func.apply(this, args);
+          }, timeout);
+        };
+      }
+      
+      const STORE_KEY = 'writepad_text';
+      const memorizeText = debounce((text) => localStorage.setItem(STORE_KEY, text));
+
+      const writepad = document.getElementById('writepad');
+      writepad.value = localStorage.getItem(STORE_KEY) || '';
+      writepad.oninput = (evt) => {
+        memorizeText(evt.target.value);
+      };
+    </script>
+  </body>
+</html>
